@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Viu Chatbot v0.3</title>
+
+    <link
+      rel="stylesheet"
+      href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css"
+    />
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        background: #fffaf0;
+        font-family: "Google Sans", Arial, sans-serif;
+      }
+
+      df-messenger {
+        z-index: 999;
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        --df-messenger-font-color: #000;
+        --df-messenger-font-family: Google Sans;
+        --df-messenger-chat-background: #fffaf0;
+        --df-messenger-message-user-background: #f6ba01;
+        --df-messenger-message-bot-background: #fff6d1;
+        --df-messenger-button-titlebar-color: #f6ba01;
+        --df-messenger-minimized-chat-bubble-color: #f6ba01;
+        --df-messenger-send-icon: #f6ba01;
+        --df-messenger-input-placeholder-color: #8d6e63;
+      }
+
+      df-messenger::part(input-container) {
+        background-color: #fff2b3;
+      }
+
+      df-messenger {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+
+  <body>
+    <df-messenger
+      location="asia-southeast1"
+      project-id="viu-pmo-poc"
+      agent-id="44aaf3e3-030c-4c52-bb55-965a731ef803"
+      language-code="en"
+      max-query-length="-1">
+      <df-messenger-chat-bubble chat-title="Viu-Chatbot-v0.3">
+      </df-messenger-chat-bubble>
+    </df-messenger>
+  </body>
+</html>
