@@ -54,30 +54,44 @@
     </df-messenger>
 
     <script>
-      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-      const ua = navigator.userAgent;
-      const device =
-        /Android/i.test(ua)
-          ? "android"
-          : /iPhone|iPad/i.test(ua)
-          ? "ios"
-          : "web";
-
-      window.addEventListener("df-messenger-loaded", function () {
+      function detectDevice() {
+        // 你想簡單：desktop / mobile / tablet
+        const ua = navigator.userAgent || "";
+        const isTablet = /iPad|Tablet|Nexus 7|Nexus 10|SM-T|Tab/i.test(ua);
+        const isMobile = /Mobi|Android|iPhone|iPod/i.test(ua);
+        if (isTablet) return "tablet";
+        if (isMobile) return "mobile";
+        return "desktop";
+      }
+    
+      window.addEventListener("df-messenger-loaded", () => {
         const dfMessenger = document.querySelector("df-messenger");
-
-        dfMessenger.sendRequest({
-          event: "init_context",
+        if (!dfMessenger) return;
+    
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Etc/UTC";
+        const device = detectDevice();
+        const locale = navigator.language || "en";
+    
+        // ✅ 正確：用 setQueryParameters 將值塞入 detectIntent 的 queryParams
+        // QueryParameters schema 有 timeZone + parameters（會變成 $session.params.xxx）:contentReference[oaicite:3]{index=3}
+        dfMessenger.setQueryParameters({
+          timeZone: tz,
           parameters: {
-            timezone: timeZone,
-            device: device
+            client_timezone: tz,
+            client_device: device,
+            client_locale: locale
           }
         });
-
-        console.log("Context sent:", timeZone, device);
+    
+        // ✅ Debug：睇下 request 係咪真係帶咗 queryParams（可留可刪）
+        window.addEventListener("df-request-sent", (e) => {
+          try {
+            console.log("DF requestBody.queryParams =", e.detail.requestBody.queryParams);
+          } catch (_) {}
+        });
       });
     </script>
+
 
   </body>
 </html>
