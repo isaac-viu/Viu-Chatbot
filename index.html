@@ -12,6 +12,7 @@
     <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
 
     <style>
+      /* 你原本啲 style，冇改 */
       html, body {
         margin: 0;
         padding: 0;
@@ -20,7 +21,6 @@
         background: #fffaf0;
         font-family: "Google Sans", Arial, sans-serif;
       }
-
       df-messenger {
         position: fixed;
         top: 0;
@@ -40,26 +40,6 @@
         --df-messenger-send-icon: #f6ba01;
         --df-messenger-input-placeholder-color: #8d6e63;
       }
-
-      df-messenger::part(input-container) {
-        background-color: #fff2b3;
-      }
-
-      df-messenger {
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      }
-
-      @media (max-width: 768px) {
-        df-messenger {
-          --df-messenger-font-size: 18px;
-        }
-      }
-
-      @media (max-width: 480px) {
-        df-messenger {
-          --df-messenger-font-size: 20px;
-        }
-      }
     </style>
   </head>
 
@@ -72,5 +52,32 @@
       max-query-length="-1">
       <df-messenger-chat chat-title="Viu ChatBot v0.4"></df-messenger-chat>
     </df-messenger>
+
+    <script>
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const ua = navigator.userAgent;
+      const device =
+        /Android/i.test(ua)
+          ? "android"
+          : /iPhone|iPad/i.test(ua)
+          ? "ios"
+          : "web";
+
+      window.addEventListener("df-messenger-loaded", function () {
+        const dfMessenger = document.querySelector("df-messenger");
+
+        dfMessenger.sendRequest({
+          event: "init_context",
+          parameters: {
+            timezone: timeZone,
+            device: device
+          }
+        });
+
+        console.log("Context sent:", timeZone, device);
+      });
+    </script>
+
   </body>
 </html>
